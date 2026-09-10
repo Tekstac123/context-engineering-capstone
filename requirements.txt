@@ -1,0 +1,3 @@
+# boto3 ships with the AWS Lambda Python runtime by default — no need to
+# bundle it in the deployment package. Listed here for local dev/testing.
+boto3>=1.34
