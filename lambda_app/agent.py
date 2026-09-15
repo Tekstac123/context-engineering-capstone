@@ -36,6 +36,7 @@ def handle_turn(session_id: str, query: str) -> dict:
     )
 
     answer = bedrock_llm.complete(prompt)
+    logger.info("ANSWER: %s", answer)
 
     memory.append_turn(session_id, "user", query)
     memory.append_turn(session_id, "assistant", answer)
