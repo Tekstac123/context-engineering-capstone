@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import re
 import logging
 
@@ -22,7 +23,11 @@ def _maybe_call_tools(query: str) -> list[dict]:
 
 
 def handle_turn(session_id: str, query: str) -> dict:
-    logger.info("USER_PROMPT: %s", query)
+    logger.info(json.dumps({
+        "event": "USER_PROMPT",
+        "session_id": session_id,
+        "query": query
+    }))
 
     retrieved = retrieval.search(query, top_k=3)
     tool_outputs = _maybe_call_tools(query)
@@ -36,7 +41,12 @@ def handle_turn(session_id: str, query: str) -> dict:
     )
 
     answer = bedrock_llm.complete(prompt)
-    logger.info("ANSWER: %s", answer)
+
+    logger.info(json.dumps({
+        "event": "ANSWER",
+        "session_id": session_id,
+        "answer": answer
+    }))
 
     memory.append_turn(session_id, "user", query)
     memory.append_turn(session_id, "assistant", answer)
